@@ -1,10 +1,7 @@
-run: ## Start all services
+up:
 	docker compose up
 
-run-detached: ## Start all services in background
-	docker compose up -d
-
-down: ## Stop and remove all containers
+down:
 	docker compose down
 
 stop: ## Stop all services
