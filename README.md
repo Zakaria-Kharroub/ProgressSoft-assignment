@@ -1,4 +1,4 @@
-# fx Clustered Data Warehouse 📊
+# FX Clustered Data Warehouse 
 
 ![Project Status](https://img.shields.io/badge/Status-Production--Ready-green)
 ![Java](https://img.shields.io/badge/Java-17-orange)
