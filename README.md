@@ -100,10 +100,10 @@ Content-Type: application/json
 Sample request:
 ```json
 {
-  "id": "DR123456",
+  "id": "FX20250624A",
   "fromCurrency": "USD",
   "toCurrency": "EUR",
-  "timestamp": "2024-01-01T10:00:00Z",
+  "timestamp": "2025-06-24T14:30:00",
   "amount": 1000000.00
 }
 ```
@@ -111,10 +111,10 @@ Sample request:
 Sample response:
 ```json
 {
-  "id": "DR123456",
+  "id": "FX20250624A",
   "fromCurrency": "USD",
   "toCurrency": "EUR",
-  "timestamp": "2024-01-01T10:00:00Z",
+  "timestamp": "2025-06-24T14:30:00",
   "amount": 1000000.00
 }
 ```
