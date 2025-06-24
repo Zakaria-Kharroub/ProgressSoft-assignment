@@ -2,16 +2,16 @@ version: '3.9'
 
 services:
   # Main Application
-  warehouse:
-    container_name: warehouse-api
+  app:
+    container_name: progressSoftApp
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '8082:8082'
+      - '8080:8080'
     environment:
-      - POSTGRES_DB=warehouse
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/warehouse
+      - POSTGRES_DB=fxwarehouse
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/fxwarehouse
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
     networks:
@@ -26,28 +26,13 @@ services:
     ports:
       - '5432:5432'
     environment:
-      - POSTGRES_DB=warehouse
+      - POSTGRES_DB=fxwarehouse
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - warehouse
-
-  # Database Administration
-  pgadmin:
-    container_name: pgadmin-warehouse
-    image: dpage/pgadmin4:latest
-    restart: unless-stopped
-    ports:
-      - '5050:80'
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@warehouse.com
-      PGADMIN_DEFAULT_PASSWORD: admin123
-    networks:
-      - warehouse
-    depends_on:
-      - postgres-db
 
 networks:
   warehouse:
