@@ -1,6 +1,6 @@
+java
 package com.progressoft.assignment.service;
 
-import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 
@@ -14,7 +14,6 @@ import com.progressoft.assignment.model.dto.DealRequest;
 import com.progressoft.assignment.model.dto.DealResponse;
 import com.progressoft.assignment.domaine.Deal;
 import com.progressoft.assignment.repository.DealRepository;
-import com.progressoft.assignment.service.DealService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,21 +48,32 @@ public class DealServiceImpl implements DealService {
     public BatchProcessingSummary createBatch(final List<DealRequest> dealRequests) {
         log.info("Starting batch processing for {} deals", dealRequests.size());
 
-        List<DealResponse> successfulResults = new ArrayList<>();
-        List<String> errorMessages = new ArrayList<>();
+        record Result(DealResponse response, String error) {}
 
-        for (DealRequest dealRequest : dealRequests) {
-            try {
-                DealResponse result = create(dealRequest);
-                successfulResults.add(result);
-                log.debug("Successfully processed deal: {}", dealRequest.getId());
-            } catch (Exception e) {
-                String errorMsg = String.format("Failed to process deal %s: %s",
-                        dealRequest.getId(), e.getMessage());
-                errorMessages.add(errorMsg);
-                log.warn("Failed to process deal: {}", errorMsg);
-            }
-        }
+        List<Result> results = dealRequests.stream()
+            .map(dealRequest -> {
+                try {
+                    DealResponse response = create(dealRequest);
+                    log.debug("Successfully processed deal: {}", dealRequest.getId());
+                    return new Result(response, null);
+                } catch (Exception e) {
+                    String errorMsg = String.format("Failed to process deal %s: %s",
+                            dealRequest.getId(), e.getMessage());
+                    log.warn("Failed to process deal: {}", errorMsg);
+                    return new Result(null, errorMsg);
+                }
+            })
+            .toList();
+
+        List<DealResponse> successfulResults = results.stream()
+            .filter(r -> r.response() != null)
+            .map(Result::response)
+            .toList();
+
+        List<String> errorMessages = results.stream()
+            .filter(r -> r.error() != null)
+            .map(Result::error)
+            .toList();
 
         BatchProcessingSummary result = new BatchProcessingSummary(
                 dealRequests.size(),
@@ -89,11 +99,13 @@ public class DealServiceImpl implements DealService {
     }
 
     private void validateCurrencyCodes(DealRequest dto) {
-        try {
-            Currency.getInstance(dto.getFromCurrency());
-            Currency.getInstance(dto.getToCurrency());
-        } catch (IllegalArgumentException ex) {
-            log.error("Invalid currency code provided: {}", ex.getMessage());
+        boolean fromCurrencyValid = Currency.getAvailableCurrencies().stream()
+            .anyMatch(c -> c.getCurrencyCode().equals(dto.getFromCurrency()));
+        boolean toCurrencyValid = Currency.getAvailableCurrencies().stream()
+            .anyMatch(c -> c.getCurrencyCode().equals(dto.getToCurrency()));
+
+        if (!fromCurrencyValid || !toCurrencyValid) {
+            log.error("Invalid currency code provided: from={}, to={}", dto.getFromCurrency(), dto.getToCurrency());
             throw new UnsupportedCurrencyCodeException("Invalid currency code.");
         }
     }
