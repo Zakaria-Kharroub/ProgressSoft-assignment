@@ -1,0 +1,37 @@
+[
+  {
+    "id": "FX001",
+    "fromCurrency": "USD",
+    "toCurrency": "EUR",
+    "timestamp": "2024-01-15T10:30:00",
+    "amount": 1000000.00
+  },
+  {
+    "id": "FX002",
+    "fromCurrency": "GBP",
+    "toCurrency": "USD",
+    "timestamp": "2024-01-15T11:45:00",
+    "amount": 750000.00
+  },
+  {
+    "id": "FX003",
+    "fromCurrency": "EUR",
+    "toCurrency": "JPY",
+    "timestamp": "2024-01-15T12:15:00",
+    "amount": 500000.00
+  },
+  {
+    "id": "FX004",
+    "fromCurrency": "USD",
+    "toCurrency": "CAD",
+    "timestamp": "2024-01-15T13:00:00",
+    "amount": 250000.00
+  },
+  {
+    "id": "FX005",
+    "fromCurrency": "AUD",
+    "toCurrency": "USD",
+    "timestamp": "2024-01-15T14:30:00",
+    "amount": 300000.00
+  }
+]
