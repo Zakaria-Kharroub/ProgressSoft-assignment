@@ -1,4 +1,3 @@
-java
 package com.progressoft.assignment.service;
 
 import java.util.Currency;
